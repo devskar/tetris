@@ -1,5 +1,5 @@
 import pygame
-
+from game.game import Tetris
 
 BACKGROUND_COLOR = (179, 179, 255)
 GAME_HEIGHT = 600
@@ -20,8 +20,11 @@ def main():
     pygame.display.flip()
 
     running = True
-
     clock = pygame.time.Clock()
+
+    tetris = Tetris(screen)
+
+    tetris.current_block.draw()
 
     while running:
         clock.tick(FPS)
@@ -29,6 +32,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+            if not tetris.is_running():
+                if event.type == pygame.KEYDOWN:
+                    tetris.start()
+
+        if tetris.is_running():
+            screen.fill(BACKGROUND_COLOR)
+            tetris.current_block.draw()
+            tetris.current_block.update()
+
+        pygame.display.flip()
 
 
 if __name__ == '__main__':
