@@ -1,6 +1,5 @@
 import pygame
 from game import Tetris
-from objects.block import Block
 
 BACKGROUND_COLOR = (179, 179, 255)
 FIELD_POSITION = (100, 0)
@@ -59,23 +58,32 @@ def main():
 
         if tetris.is_running:
 
+            # checks if the current block became solid
             if tetris.current_block.solid:
+
+                # adding coordinates from the current block to solid squares
                 for coord in tetris.current_block.coordinates:
                     tetris.solid_coords[coord[1]][coord[0]] = 1
+
+                    # creating a new block
                     tetris.create_new_block()
 
+            # re-drawing the field
             tetris.field.draw()
 
             for y, row in enumerate(tetris.solid_coords):
                 for x, column in enumerate(tetris.solid_coords[y]):
                     # checks if a square belongs to the position
                     if column == 1:
-                        print(x, y)
                         tetris.field.draw_rectangle((255, 255, 204), x, y)
 
+            # drawing the block on the field
             tetris.field.draw_block(tetris.current_block)
 
+            # dropping the block one square down
             tetris.current_block.drop(1)
+
+            # updating the field on the main surface
             screen.blit(tetris.field.surface, FIELD_POSITION)
 
         pygame.display.flip()

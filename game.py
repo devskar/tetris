@@ -30,6 +30,7 @@ class Tetris:
         self.create_new_block()
 
     def create_new_block(self):
+        del self.current_block
         self.current_block = Block(self.form_handler.get_random_form(), self)
 
     @property

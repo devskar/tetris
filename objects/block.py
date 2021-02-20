@@ -61,6 +61,3 @@ class Block:
                 if column != '0':
                     coords.append([self.start_pos + x, y])
         return coords
-
-
-
