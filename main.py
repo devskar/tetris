@@ -40,7 +40,7 @@ def main():
                 running = False
 
             if event.type == pygame.KEYDOWN:
-                if tetris.is_running():
+                if tetris.is_running:
                     # movement keys
                     if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                         tetris.current_block.move_x(1)
@@ -54,10 +54,16 @@ def main():
                     if event.key == pygame.K_UP or event.key == pygame.K_w:
                         tetris.current_block.rotate()
 
-                if not tetris.is_running():
+                if not tetris.is_running:
                     tetris.start()
 
-        if tetris.is_running():
+        if tetris.is_running:
+
+            if tetris.current_block.solid:
+                for coord in tetris.current_block.coordinates:
+                    tetris.solid_coords[coord[0]][coord[1]] = [1]
+                    tetris.create_new_block()
+
             tetris.field.draw()
             tetris.field.draw_block(tetris.current_block)
 
