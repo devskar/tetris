@@ -1,5 +1,3 @@
-import random
-
 class Block:
     def __init__(self, form, tetris):
 
@@ -16,23 +14,40 @@ class Block:
     def rotate(self):
         pass
 
-    # adds y value to all coordinates of block and checks if it hits edges
     def drop(self, amount):
+
         for coord in self.coordinates:
-            if not 0 <= (coord[1] + amount) < self.tetris.get_game_height:
+            poss_y = coord[1] + amount
+
+            # checks if the block would hit the bottom or top
+            if not 0 <= poss_y < self.tetris.get_game_height:
+                self.solid = True
+                return
+
+            # checks if the block would hit a solid square
+            if self.tetris.solid_coords[poss_y][coord[0]] == 1:
                 self.solid = True
                 return
 
         for coord in self.coordinates:
+            # adds amount to all y coordinates
             coord[1] += amount
 
-    # adds x value to all coordinates of block and checks if it hits edges
     def move_x(self, amount):
+
         for coord in self.coordinates:
-            if not 0 <= (coord[0] + amount) < self.tetris.get_game_width:
+            poss_x = coord[0] + amount
+
+            # checks if the block would hit an edge
+            if not 0 <= poss_x < self.tetris.get_game_width:
+                return
+
+            # checks if the block would hit a solid square
+            if self.tetris.solid_coords[coord[1]][poss_x] == 1:
                 return
 
         for coord in self.coordinates:
+            # adds amount to all x coordinates
             coord[0] += amount
 
     # returns the start position of the block on the field

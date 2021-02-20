@@ -61,10 +61,18 @@ def main():
 
             if tetris.current_block.solid:
                 for coord in tetris.current_block.coordinates:
-                    tetris.solid_coords[coord[0]][coord[1]] = [1]
+                    tetris.solid_coords[coord[1]][coord[0]] = 1
                     tetris.create_new_block()
 
             tetris.field.draw()
+
+            for y, row in enumerate(tetris.solid_coords):
+                for x, column in enumerate(tetris.solid_coords[y]):
+                    # checks if a square belongs to the position
+                    if column == 1:
+                        print(x, y)
+                        tetris.field.draw_rectangle((255, 255, 204), x, y)
+
             tetris.field.draw_block(tetris.current_block)
 
             tetris.current_block.drop(1)

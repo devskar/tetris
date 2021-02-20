@@ -15,9 +15,8 @@ class Tetris:
 
         self.form_handler = FormHandler()
 
-        self.solid_coords = [[0] * GAME_HEIGHT for _ in range(GAME_WIDTH)]
+        self.solid_coords = [[0] * GAME_WIDTH for _ in range(GAME_HEIGHT)]
 
-        print(self.solid_coords)
         self.current_block = None
 
         self.game_over = False
@@ -76,7 +75,10 @@ class Field:
     def draw_block(self, block: Block):
 
         for coord in block.coordinates:
-            pygame.draw.rect(self.surface, block.color, self.__tulip_outer(coord[0], coord[1]))
+            self.draw_rectangle(block.color, coord[0], coord[1])
+
+    def draw_rectangle(self, color, x, y):
+        pygame.draw.rect(self.surface, color, self.__tulip_outer(x, y))
 
     def draw_outer_square(self, x, y, color):
         pygame.draw.rect(self.surface, color, self.__tulip_outer(x, y))
