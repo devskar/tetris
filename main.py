@@ -39,6 +39,11 @@ def main():
                 running = False
 
             if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_r:
+                    running = False
+                    main()
+
                 if tetris.is_running:
                     # movement keys
                     if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -61,12 +66,19 @@ def main():
             # checks if the current block became solid
             if tetris.current_block.solid:
 
+                tetris.round += 1
+
                 # adding coordinates from the current block to solid squares
                 for coord in tetris.current_block.coordinates:
                     tetris.solid_coords[coord[1]][coord[0]] = 1
 
                     # creating a new block
                     tetris.create_new_block()
+
+            for row in tetris.solid_coords:
+                if row.count(1) == len(row):
+                    tetris.solid_coords.remove([1] * 10)
+                    tetris.solid_coords.append([0] * 10)
 
             # re-drawing the field
             tetris.field.draw()

@@ -31,7 +31,7 @@ class Tetris:
 
     def create_new_block(self):
         del self.current_block
-        self.current_block = Block(self.form_handler.get_random_form(), self)
+        self.current_block = Block(['11', '11'], self)
 
     @property
     def is_running(self):

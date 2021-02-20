@@ -5,14 +5,24 @@ class Block:
         self.color = tetris.get_random_color
         self.form = form
         self.solid = False
-
         # calculates start x value on the field
         self.start_pos = int(5 - len(self.form[0]) / 2)
 
         self.coordinates = self.calculate_start_coords()
 
+    # rotates the block
     def rotate(self):
-        pass
+
+        new_form = []
+
+        for i in range(len(self.form[0])):
+            row = ''
+            for old_row in reversed(self.form):
+                row += old_row[i]
+            new_form.append(row)
+
+        self.form = new_form
+
 
     def drop(self, amount):
 
