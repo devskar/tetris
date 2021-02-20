@@ -1,8 +1,10 @@
 import pygame
-from game.game import Tetris
+from game import Tetris
+from objects.block import Block
 
 BACKGROUND_COLOR = (179, 179, 255)
-GAME_HEIGHT = 600
+FIELD_POSITION = (100, 0)
+GAME_HEIGHT = 500
 GAME_WIDTH = 400
 FPS = 10
 
@@ -22,9 +24,13 @@ def main():
     running = True
     clock = pygame.time.Clock()
 
-    tetris = Tetris(screen)
+    # creating tetris object
+    tetris = Tetris()
 
-    tetris.current_block.draw()
+    tetris.field.draw()
+
+    # showing the 'playground' surface on screen
+    screen.blit(tetris.field.surface, FIELD_POSITION)
 
     while running:
         clock.tick(FPS)
@@ -38,9 +44,9 @@ def main():
                     tetris.start()
 
         if tetris.is_running():
-            screen.fill(BACKGROUND_COLOR)
-            tetris.current_block.draw()
-            tetris.current_block.update()
+
+            # tetris.field.draw_block(tetris.current_block)
+            screen.blit(tetris.field.surface, FIELD_POSITION)
 
         pygame.display.flip()
 
