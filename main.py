@@ -75,10 +75,15 @@ def main():
                     # creating a new block
                     tetris.create_new_block()
 
+            # removing solid row
             for row in tetris.solid_coords:
+                # checks if a row is completely solid
                 if row.count(1) == len(row):
+                    # removes that row
                     tetris.solid_coords.remove([1] * 10)
-                    tetris.solid_coords.append([0] * 10)
+
+                    # inserts a new row at the top
+                    tetris.solid_coords.insert(0, [0] * 10)
 
             # re-drawing the field
             tetris.field.draw()
