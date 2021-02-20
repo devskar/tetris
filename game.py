@@ -15,7 +15,7 @@ class Tetris:
 
         self.form_handler = FormHandler()
 
-        self.solid_squares = []
+        self.solid_squares = [[0] * GAME_WIDTH] * GAME_HEIGHT
         self.current_block = None
 
         self.game_over = False
@@ -26,9 +26,7 @@ class Tetris:
 
     def start(self):
         self.__running = True
-        self.current_block = Block(self.form_handler.get_random_form())
-        # self.current_block.drop()
-        self.field.draw_block(self.current_block)
+        self.current_block = Block(self.form_handler.get_random_form(), self)
 
     def is_running(self):
         return self.__running
@@ -36,6 +34,14 @@ class Tetris:
     @staticmethod
     def get_rect_size():
         return RECT_SIZE
+
+    @property
+    def get_game_height(self):
+        return GAME_HEIGHT
+
+    @property
+    def get_game_width(self):
+        return GAME_WIDTH
 
 
 class Field:
