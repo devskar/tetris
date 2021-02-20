@@ -1,21 +1,23 @@
 from handler.form_handler import FormHandler
 from objects.block import Block
-import pygame
+import pygame, random
 
 # game width and high in amount of blocks
 GAME_WIDTH, GAME_HEIGHT = 10, 20
 RECT_SIZE = 25
+COLORS = [(250, 176, 0), (241, 79, 28), (107, 126, 247), (150, 46, 19), (0, 163, 232), (124, 180, 0)]
 
 
 class Tetris:
 
     def __init__(self):
-
         self.field = Field()
 
         self.form_handler = FormHandler()
 
-        self.solid_squares = [[0] * GAME_WIDTH] * GAME_HEIGHT
+        self.solid_coords = [[0] * GAME_HEIGHT for _ in range(GAME_WIDTH)]
+
+        print(self.solid_coords)
         self.current_block = None
 
         self.game_over = False
@@ -26,13 +28,17 @@ class Tetris:
 
     def start(self):
         self.__running = True
+        self.create_new_block()
+
+    def create_new_block(self):
         self.current_block = Block(self.form_handler.get_random_form(), self)
 
+    @property
     def is_running(self):
         return self.__running
 
-    @staticmethod
-    def get_rect_size():
+    @property
+    def get_rect_size(self):
         return RECT_SIZE
 
     @property
@@ -42,6 +48,14 @@ class Tetris:
     @property
     def get_game_width(self):
         return GAME_WIDTH
+
+    @property
+    def get_colors(self):
+        return COLORS
+
+    @property
+    def get_random_color(self):
+        return COLORS[random.randint(0, len(COLORS) - 1)]
 
 
 class Field:
@@ -63,15 +77,6 @@ class Field:
 
         for coord in block.coordinates:
             pygame.draw.rect(self.surface, block.color, self.__tulip_outer(coord[0], coord[1]))
-
-        # # loops through the form of the block and draws all the squares
-        # for y, row in enumerate(block.form):
-        #     for x, column in enumerate(block.form[y]):
-        #         # checks if a square belongs to the position
-        #         if column != '0':
-        #             pygame.draw.rect(self.surface, block.color, self.__tulip_outer(start_pos + x, y))
-        #             # self.draw_outer_square(start_pos + x, y, block.color)
-        #             # self.draw_inner_square(start_pos + x, y, (0, 0, 0))
 
     def draw_outer_square(self, x, y, color):
         pygame.draw.rect(self.surface, color, self.__tulip_outer(x, y))
