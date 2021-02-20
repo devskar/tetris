@@ -39,13 +39,29 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            if not tetris.is_running():
-                if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
+                if tetris.is_running():
+                    # movement keys
+                    if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                        tetris.current_block.move_x(1)
+
+                    if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                        tetris.current_block.move_x(-1)
+
+                    if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                        tetris.current_block.drop(1)
+
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                        tetris.current_block.rotate()
+
+                if not tetris.is_running():
                     tetris.start()
 
         if tetris.is_running():
+            tetris.field.draw()
+            tetris.field.draw_block(tetris.current_block)
 
-            # tetris.field.draw_block(tetris.current_block)
+            tetris.current_block.drop(1)
             screen.blit(tetris.field.surface, FIELD_POSITION)
 
         pygame.display.flip()
