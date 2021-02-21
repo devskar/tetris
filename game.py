@@ -31,7 +31,7 @@ class Tetris:
 
     def create_new_block(self):
         del self.current_block
-        self.current_block = Block(['11', '11'], self)
+        self.current_block = Block(self.form_handler.get_random_form(), self)
 
     @property
     def is_running(self):
@@ -75,8 +75,10 @@ class Field:
     # draws the block at the top of the field
     def draw_block(self, block: Block):
 
-        for coord in block.coordinates:
-            self.draw_rectangle(block.color, coord[0], coord[1])
+        for y2, row in enumerate(block.form):
+            for x2, column in enumerate(row):
+                if column == '1':
+                    self.draw_rectangle(block.color, block.x+x2, block.y+y2)
 
     def draw_rectangle(self, color, x, y):
         pygame.draw.rect(self.surface, color, self.__tulip_outer(x, y))

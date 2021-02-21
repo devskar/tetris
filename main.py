@@ -63,17 +63,23 @@ def main():
 
         if tetris.is_running:
 
+            # checks if new block is on a solid square which would cause game over
+            for coord in tetris.current_block.square_coords:
+                if tetris.solid_coords[coord[1]][coord[0]] == 1:
+                    print('GAME OVER')
+                    running = False
+
             # checks if the current block became solid
             if tetris.current_block.solid:
 
                 tetris.round += 1
 
                 # adding coordinates from the current block to solid squares
-                for coord in tetris.current_block.coordinates:
+                for coord in tetris.current_block.square_coords:
                     tetris.solid_coords[coord[1]][coord[0]] = 1
 
-                    # creating a new block
-                    tetris.create_new_block()
+                # creating a new block
+                tetris.create_new_block()
 
             # removing solid row
             for row in tetris.solid_coords:

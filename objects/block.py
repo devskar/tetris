@@ -8,7 +8,10 @@ class Block:
         # calculates start x value on the field
         self.start_pos = int(5 - len(self.form[0]) / 2)
 
-        self.coordinates = self.calculate_start_coords()
+        self.direction = 0
+
+        self.y, self.x = 0, self.start_pos
+        self.square_coords = self.calculate_square_coords(self.form)
 
     # rotates the block
     def rotate(self):
@@ -21,12 +24,16 @@ class Block:
                 row += old_row[i]
             new_form.append(row)
 
-        self.form = new_form
+        for coord in self.calculate_square_coords(new_form):
+            if self.tetris.solid_coords[coord[1]][coord[0]] == 1:
+                return
 
+        self.form = new_form
+        self.update_square_coords()
 
     def drop(self, amount):
 
-        for coord in self.coordinates:
+        for coord in self.square_coords:
             poss_y = coord[1] + amount
 
             # checks if the block would hit the bottom or top
@@ -39,13 +46,12 @@ class Block:
                 self.solid = True
                 return
 
-        for coord in self.coordinates:
-            # adds amount to all y coordinates
-            coord[1] += amount
+        self.y += amount
+        self.update_square_coords()
 
     def move_x(self, amount):
 
-        for coord in self.coordinates:
+        for coord in self.square_coords:
             poss_x = coord[0] + amount
 
             # checks if the block would hit an edge
@@ -56,18 +62,19 @@ class Block:
             if self.tetris.solid_coords[coord[1]][poss_x] == 1:
                 return
 
-        for coord in self.coordinates:
-            # adds amount to all x coordinates
-            coord[0] += amount
+        # adds amount to all x coordinates
+        self.x += amount
+        self.update_square_coords()
 
-    # returns the start position of the block on the field
-    def calculate_start_coords(self):
+    def update_square_coords(self):
+        self.square_coords = self.calculate_square_coords(self.form)
+
+    def calculate_square_coords(self, form):
+
         coords = []
 
-        # loops through the form of the block and adds all coordinates
-        for y, row in enumerate(self.form):
-            for x, column in enumerate(self.form[y]):
-                # checks if a square belongs to the position
-                if column != '0':
-                    coords.append([self.start_pos + x, y])
+        for y, row in enumerate(form):
+            for x, column in enumerate(row):
+                if column == '1':
+                    coords.append([self.x + x, self.y + y])
         return coords
