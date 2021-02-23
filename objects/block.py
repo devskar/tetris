@@ -31,7 +31,7 @@ class Block:
         self.form = new_form
         self.update_square_coords()
 
-    def drop(self, amount):
+    def drop(self, amount=1):
 
         for coord in self.square_coords:
             poss_y = coord[1] + amount

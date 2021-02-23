@@ -11,6 +11,7 @@ COLORS = [(250, 176, 0), (241, 79, 28), (107, 126, 247), (150, 46, 19), (0, 163,
 class Tetris:
 
     def __init__(self):
+
         self.field = Field()
 
         self.form_handler = FormHandler()
@@ -21,17 +22,24 @@ class Tetris:
 
         self.game_over = False
         self.score = 0
-        self.round = 0
+        self.round = 1
 
         self.__running = False
 
     def start(self):
-        self.__running = True
         self.create_new_block()
+        self.__running = True
+
+        # dropping the block every x milliseconds
+        pygame.time.set_timer(self.get_block_down_event, self.get_speed)
 
     def create_new_block(self):
         del self.current_block
         self.current_block = Block(self.form_handler.get_random_form(), self)
+
+    @property
+    def get_speed(self):
+        return round(1/self.round * 200) + 50
 
     @property
     def is_running(self):
@@ -56,6 +64,10 @@ class Tetris:
     @property
     def get_random_color(self):
         return COLORS[random.randint(0, len(COLORS) - 1)]
+
+    @property
+    def get_block_down_event(self):
+        return pygame.USEREVENT + 1
 
 
 class Field:

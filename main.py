@@ -1,11 +1,12 @@
 import pygame
+
 from game import Tetris
 
 BACKGROUND_COLOR = (179, 179, 255)
 FIELD_POSITION = (100, 0)
 GAME_HEIGHT = 500
 GAME_WIDTH = 400
-FPS = 10
+FPS = 60
 
 
 def main():
@@ -38,6 +39,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+            if event.type == tetris.get_block_down_event:
+                # dropping the block one square down
+                tetris.current_block.drop(1)
+
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_r:
@@ -67,19 +72,7 @@ def main():
             for coord in tetris.current_block.square_coords:
                 if tetris.solid_coords[coord[1]][coord[0]] == 1:
                     print('GAME OVER')
-                    running = False
-
-            # checks if the current block became solid
-            if tetris.current_block.solid:
-
-                tetris.round += 1
-
-                # adding coordinates from the current block to solid squares
-                for coord in tetris.current_block.square_coords:
-                    tetris.solid_coords[coord[1]][coord[0]] = 1
-
-                # creating a new block
-                tetris.create_new_block()
+                    return
 
             # removing solid row
             for row in tetris.solid_coords:
@@ -94,6 +87,7 @@ def main():
             # re-drawing the field
             tetris.field.draw()
 
+            # draws solid squares
             for y, row in enumerate(tetris.solid_coords):
                 for x, column in enumerate(tetris.solid_coords[y]):
                     # checks if a square belongs to the position
@@ -103,8 +97,22 @@ def main():
             # drawing the block on the field
             tetris.field.draw_block(tetris.current_block)
 
-            # dropping the block one square down
-            tetris.current_block.drop(1)
+            # checks if the current block became solid
+            if tetris.current_block.solid:
+
+                tetris.round += 1
+
+                print(tetris.round)
+
+                print(tetris.get_speed)
+                pygame.time.set_timer(tetris.get_block_down_event, tetris.get_speed)
+
+                # adding coordinates from the current block to solid squares
+                for coord in tetris.current_block.square_coords:
+                    tetris.solid_coords[coord[1]][coord[0]] = 1
+
+                # creating a new block
+                tetris.create_new_block()
 
             # updating the field on the main surface
             screen.blit(tetris.field.surface, FIELD_POSITION)
